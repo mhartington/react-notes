@@ -1,0 +1,9 @@
+.quill {
+  height: 300px;
+  width: 100%;
+  padding: var(--ion-padding);
+}
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  border: none;
+}

@@ -1,23 +1,74 @@
-import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab1.css';
-
+import React, { useState, useEffect, useCallback } from 'react';
+import { Plugins, FilesystemDirectory } from '@capacitor/core';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonButtons,
+  IonItem,
+  IonIcon,
+  useIonViewWillEnter,
+} from '@ionic/react';
+import { add } from 'ionicons/icons';
+const noop = () => {};
+const makeDir = async () => {
+  const { Filesystem } = Plugins;
+  return await Filesystem.mkdir({
+    path: 'notes',
+    directory: FilesystemDirectory.Documents,
+  });
+};
+const readDir = async () => {
+  const { Filesystem } = Plugins;
+  return await Filesystem.readdir({
+    path: 'notes',
+    directory: FilesystemDirectory.Documents,
+  });
+};
 const Tab1: React.FC = () => {
+  const [files, setState] = useState<Array<string>>([]);
+  const setup = useCallback(() => {
+    makeDir()
+      .then(noop, noop)
+      .then(readDir)
+      .then(({ files }) => {
+        const formatted = files.sort(
+          (a, b) =>
+            parseInt(b.replace(/note-/, '').replace(/.txt/, '')) -
+            parseInt(a.replace(/note-/, '').replace(/.txt/, ''))
+        );
+        setState(formatted);
+      });
+  }, []);
+  useEffect(() => setup(), [setup]);
+  useIonViewWillEnter(() => setup());
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+          <IonButtons slot="end">
+            <IonButton routerLink="/new">
+              <IonIcon icon={add}></IonIcon>
+            </IonButton>
+          </IonButtons>
+          <IonTitle>Notes</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
+            <IonTitle size="large">Notes</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+
+        {files.map((file, idx) => (
+          <IonItem key={idx} routerLink={'/edit/' + file}>
+            {file}
+          </IonItem>
+        ))}
       </IonContent>
     </IonPage>
   );

@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "React Notes",
+  "appName": "cap-react",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",
