@@ -1,11 +1,13 @@
 {
-  "name": "React Notes",
+  "name": "react-notes",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@capacitor/android": "^2.4.4",
-    "@capacitor/core": "^2.4.4",
-    "@capacitor/ios": "^2.4.4",
+    "@capacitor/android": "^3.0.0-beta.1",
+    "@capacitor/cli": "^3.0.0-beta.1",
+    "@capacitor/core": "^3.0.0-beta.1",
+    "@capacitor/filesystem": "^0.3.0",
+    "@capacitor/ios": "^3.0.0-beta.1",
     "@ionic/react": "^5.0.7",
     "@ionic/react-router": "^5.0.7",
     "@testing-library/jest-dom": "^4.2.4",
@@ -49,8 +51,6 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@capacitor/cli": "^2.4.4"
-  },
+  "devDependencies": {},
   "description": "An Ionic project"
 }

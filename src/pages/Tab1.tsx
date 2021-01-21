@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plugins, FilesystemDirectory } from '@capacitor/core';
+import { Filesystem, FilesystemDirectory } from '@capacitor/filesystem';
 import {
   IonContent,
   IonHeader,
@@ -14,15 +14,15 @@ import {
 } from '@ionic/react';
 import { add } from 'ionicons/icons';
 const noop = () => {};
+const requestPermission = () => Filesystem.requestPermissions();
+
 const makeDir = async () => {
-  const { Filesystem } = Plugins;
   return await Filesystem.mkdir({
     path: 'notes',
     directory: FilesystemDirectory.Documents,
   });
 };
 const readDir = async () => {
-  const { Filesystem } = Plugins;
   return await Filesystem.readdir({
     path: 'notes',
     directory: FilesystemDirectory.Documents,
@@ -31,7 +31,13 @@ const readDir = async () => {
 const Tab1: React.FC = () => {
   const [files, setState] = useState<Array<string>>([]);
   const setup = useCallback(() => {
-    makeDir()
+    requestPermission()
+    .then((canAccesss) => {
+      console.log(canAccesss)
+        if (canAccesss) {
+          return makeDir();
+        }
+      })
       .then(noop, noop)
       .then(readDir)
       .then(({ files }) => {

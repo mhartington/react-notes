@@ -21,10 +21,10 @@ import './Editor.css';
 
 import { save, trashBin } from 'ionicons/icons';
 import {
-  Plugins,
+  Filesystem,
   FilesystemDirectory,
   FilesystemEncoding,
-} from '@capacitor/core';
+} from '@capacitor/filesystem';
 
 const EditorPage: React.FC = () => {
   const [state, setState] = useState('');
@@ -32,7 +32,6 @@ const EditorPage: React.FC = () => {
   const params = useParams<{ name: string }>();
 
   useIonViewWillEnter(async () => {
-    const { Filesystem } = Plugins;
     const file = params.name;
     if (file) {
       const { data } = await Filesystem.readFile({
@@ -44,7 +43,6 @@ const EditorPage: React.FC = () => {
     }
   });
   const deleteFile = async () => {
-    const { Filesystem } = Plugins;
     const file = params.name;
     if (file) {
       await Filesystem.deleteFile({
@@ -55,7 +53,6 @@ const EditorPage: React.FC = () => {
     }
   };
   const saveFile = async () => {
-    const { Filesystem } = Plugins;
     const file = params.name ? params.name : `note-${Date.now()}.txt`;
     await Filesystem.writeFile({
       path: `notes/${file}`,
